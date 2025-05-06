@@ -1,0 +1,14 @@
+# Dev environment
+pip
+autopep8
+
+
+# App Libraries
+Flask
+request
+sqlite3
+pandas
+scikit-learn
+datetime
+json
+random
