@@ -1,0 +1,226 @@
+/* This file will contain the CSS styles for the library application. */
+
+body {
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* More modern font stack */
+  background-color: #e9ecef; /* Slightly darker grey background */
+  color: #343a40; /* Dark grey text */
+  line-height: 1.6;
+}
+
+header {
+  background-color: #0056b3; /* Darker blue for header */
+  color: white;
+  padding: 20px 0; /* Add vertical padding */
+  text-align: center;
+  margin-bottom: 30px; /* Increased margin */
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* More prominent shadow */
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5em; /* Larger heading */
+}
+
+nav { margin-top: 15px; } /* Increased margin */
+nav a {
+    margin: 0 15px; /* Increased margin */
+    text-decoration: none;
+    color: white;
+    font-weight: bold; /* Bold navigation links */
+    transition: color 0.3s ease-in-out; /* Smooth color transition */
+}
+nav a:hover {
+    text-decoration: underline;
+    color: #cce5ff; /* Lighter blue on hover */
+}
+
+.container {
+  margin-top: 30px; /* Increased margin */
+}
+
+.section, .dashboard {
+  margin-bottom: 30px; /* Increased margin */
+  padding: 25px; /* Increased padding */
+  border: 1px solid #ced4da; /* Lighter border */
+  border-radius: 10px; /* More rounded corners */
+  background-color: #fff; /* White background for sections */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* More prominent shadow */
+}
+
+.hidden { display: none; }
+.animated { transition: opacity 0.5s ease-in-out; }
+.fade-in { opacity: 1; }
+.fade-out { opacity: 0; }
+
+.dashboard h2 {
+  color: #0056b3; /* Darker blue for dashboard headings */
+  border-bottom: 2px solid #007bff; /* Primary blue underline */
+  padding-bottom: 15px; /* Increased padding */
+  margin-bottom: 20px; /* Increased margin */
+  font-size: 2em; /* Larger heading */
+}
+
+.dashboard h3 {
+    color: #343a40; /* Dark grey for subheadings */
+    margin-top: 25px;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+}
+
+.dashboard h4 {
+    color: #495057; /* Slightly lighter grey for smaller headings */
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+}
+
+
+#login-panel .form-label {
+    font-weight: bold;
+    color: #495057;
+}
+#login-panel .form-control {
+    margin-bottom: 20px; /* Increased margin */
+    border-radius: 5px;
+}
+
+/* Table Styling */
+.table {
+    margin-top: 15px;
+    border-collapse: separate; /* Allows for rounded corners on table */
+    border-spacing: 0;
+}
+
+.table th {
+    background-color: #007bff; /* Primary blue for table headers */
+    color: white;
+    font-weight: bold;
+    border-bottom: none; /* Remove default border */
+    padding: 12px 15px; /* Add padding */
+}
+
+.table td {
+    padding: 12px 15px; /* Add padding */
+    vertical-align: middle;
+    border-top: 1px solid #dee2e6; /* Add top border for separation */
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f8f9fa; /* Light grey for odd rows */
+}
+
+.table-striped tbody tr:hover {
+    background-color: #e9ecef; /* Lighter grey background on hover */
+    cursor: pointer;
+}
+
+/* Button Styling */
+.btn {
+    border-radius: 5px;
+    padding: 8px 15px;
+    transition: background-color 0.2s ease-in-out, opacity 0.2s ease-in-out;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #212529; /* Dark text for warning button */
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #d39e00;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+.btn-info:hover {
+    background-color: #138496;
+    border-color: #117a8b;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+/* Specific hover effects for action buttons within tables */
+.table .btn:hover {
+    opacity: 0.9; /* Slightly less pronounced hover for table buttons */
+}
+
+/* Flash Messages */
+.flash-messages {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.flash-messages li {
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.flash-messages li.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.flash-messages li.danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.flash-messages li.warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+}
+
+.flash-messages li.info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}

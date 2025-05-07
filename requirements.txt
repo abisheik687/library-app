@@ -5,10 +5,11 @@ autopep8
 
 # App Libraries
 Flask
-request
-sqlite3
+requests
 pandas
 scikit-learn
 datetime
-json
-random
+flask_sqlalchemy
+flask_cors
+Flask-Login
+Flask-WTF

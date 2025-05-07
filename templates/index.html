@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Library Management System</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+
+  <body>
+    <header>
+      <h1>Smart Library Management System</h1>
+      <nav>
+        {% if current_user.is_authenticated %}
+          <span>Welcome, {{ current_user.name if current_user.name else current_user.username }}!</span>
+          <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+          <a href="{{ url_for('login') }}">Login</a>
+        {% endif %}
+      </nav>
+    </header>
+
+    <div class="container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+              <ul class="flash-messages">
+              {% for category, message in messages %}
+                  <li class="{{ category }}">{{ message }}</li>
+              {% endfor %}
+              </ul>
+          {% endif %}
+      {% endwith %}
+
+      {% if current_user.is_authenticated %}
+        {% if current_user.is_admin %}
+          <div id="admin-dashboard" class="dashboard animated fade-in">
+            <h2>Admin Dashboard</h2>
+
+            <h3>Library Overview</h3>
+            <p>Total Books: <span id="total-books">15</span></p>
+            <p>Books Borrowed: <span id="books-borrowed">5</span></p>
+            <p>Books Available: <span id="books-available">10</span></p>
+            <p>Total Users: <span id="total-users">3</span></p>
+            <p>Total Staff: <span id="total-staff">1</span></p>
+
+            <h3 class="mt-4">Book Management</h3>
+            <button class="btn btn-primary mb-3" id="add-book-btn">Add New Book</button>
+            <div id="add-book-form" class="hidden">
+                <h4>Add Book</h4>
+                <form id="new-book-form">
+                    <div class="mb-3">
+                        <label for="book-title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="book-title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="book-author" class="form-label">Author</label>
+                        <input type="text" class="form-control" id="book-author" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="book-isbn" class="form-label">ISBN</label>
+                        <input type="text" class="form-control" id="book-isbn" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Save Book</button>
+                    <button type="button" class="btn btn-secondary cancel-btn">Cancel</button>
+                </form>
+            </div>
+
+            <h4 class="mt-4">All Books</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>ISBN</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="books-table-body">
+                    <!-- Sample Book Data (replace with dynamic data from backend) -->
+                    <tr>
+                        <td>1</td>
+                        <td>The Hitchhiker's Guide to the Galaxy</td>
+                        <td>Douglas Adams</td>
+                        <td>978-0345391803</td>
+                        <td>Available</td>
+                        <td>
+                            <button class="btn btn-sm btn-info">View</button>
+                            <button class="btn btn-sm btn-warning">Edit</button>
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Pride and Prejudice</td>
+                        <td>Jane Austen</td>
+                        <td>978-0141439518</td>
+                        <td>Borrowed</td>
+                        <td>
+                            <button class="btn btn-sm btn-info">View</button>
+                            <button class="btn btn-sm btn-warning">Edit</button>
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>1984</td>
+                        <td>George Orwell</td>
+                        <td>978-0451524935</td>
+                        <td>Available</td>
+                        <td>
+                            <button class="btn btn-sm btn-info">View</button>
+                            <button class="btn btn-sm btn-warning">Edit</button>
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td>4</td>
+                        <td>To Kill a Mockingbird</td>
+                        <td>Harper Lee</td>
+                        <td>978-0061120084</td>
+                        <td>Available</td>
+                        <td>
+                            <button class="btn btn-sm btn-info">View</button>
+                            <button class="btn btn-sm btn-warning">Edit</button>
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td>5</td>
+                        <td>The Great Gatsby</td>
+                        <td>F. Scott Fitzgerald</td>
+                        <td>978-0743273565</td>
+                        <td>Borrowed</td>
+                        <td>
+                            <button class="btn btn-sm btn-info">View</button>
+                            <button class="btn btn-sm btn-warning">Edit</button>
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td>6</td>
+                        <td>Moby Dick</td>
+                        <td>Herman Melville</td>
+                        <td>978-0142437247</td>
+                        <td>Available</td>
+                        <td>
+                            <button class="btn btn-sm btn-info">View</button>
+                            <button class="btn btn-sm btn-warning">Edit</button>
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td>7</td>
+                        <td>War and Peace</td>
+                        <td>Leo Tolstoy</td>
+                        <td>978-0140447934</td>
+                        <td>Available</td>
+                        <td>
+                            <button class="btn btn-sm btn-info">View</button>
+                            <button class="btn btn-sm btn-warning">Edit</button>
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td>8</td>
+                        <td>The Odyssey</td>
+                        <td>Homer</td>
+                        <td>978-0140268867</td>
+                        <td>Borrowed</td>
+                        <td>
+                            <button class="btn btn-sm btn-info">View</button>
+                            <button class="btn btn-sm btn-warning">Edit</button>
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td>9</td>
+                        <td>The Catcher in the Rye</td>
+                        <td>J.D. Salinger</td>
+                        <td>978-0316769174</td>
+                        <td>Available</td>
+                        <td>
+                            <button class="btn btn-sm btn-info">View</button>
+                            <button class="btn btn-sm btn-warning">Edit</button>
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td>10</td>
+                        <td>The Divine Comedy</td>
+                        <td>Dante Alighieri</td>
+                        <td>978-0142437223</td>
+                        <td>Available</td>
+                        <td>
+                            <button class="btn btn-sm btn-info">View</button>
+                            <button class="btn btn-sm btn-warning">Edit</button>
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td>11</td>
+                        <td>The Brothers Karamazov</td>
+                        <td>Fyodor Dostoevsky</td>
+                        <td>978-0374528379</td>
+                        <td>Borrowed</td>
+                        <td>
+                            <button class="btn btn-sm btn-info">View</button>
+                            <button class="btn btn-sm btn-warning">Edit</button>
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td>12</td>
+                        <td>Crime and Punishment</td>
+                        <td>Fyodor Dostoevsky</td>
+                        <td>978-0140449136</td>
+                        <td>Available</td>
+                        <td>
+                            <button class="btn btn-sm btn-info">View</button>
+                            <button class="btn btn-sm btn-warning">Edit</button>
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td>13</td>
+                        <td>The Picture of Dorian Gray</td>
+                        <td>Oscar Wilde</td>
+                        <td>978-0141442464</td>
+                        <td>Available</td>
+                        <td>
+                            <button class="btn btn-sm btn-info">View</button>
+                            <button class="btn btn-sm btn-warning">Edit</button>
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td>14</td>
+                        <td>Frankenstein</td>
+                        <td>Mary Shelley</td>
+                        <td>978-0141439518</td>
+                        <td>Borrowed</td>
+                        <td>
+                            <button class="btn btn-sm btn-info">View</button>
+                            <button class="btn btn-sm btn-warning">Edit</button>
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td>15</td>
+                        <td>Dracula</td>
+                        <td>Bram Stoker</td>
+                        <td>978-0141441146</td>
+                        <td>Available</td>
+                        <td>
+                            <button class="btn btn-sm btn-info">View</button>
+                            <button class="btn btn-sm btn-warning">Edit</button>
+                            <button class="btn btn-sm btn-warning">Edit</button>
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 class="mt-4">User Management</h3>
+             <button class="btn btn-primary mb-3" id="add-user-btn">Add New User</button>
+             <div id="add-user-form" class="hidden">
+                <h4>Add User</h4>
+                <form id="new-user-form">
+                    <div class="mb-3">
+                        <label for="user-username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="user-username" required>
+                    </div>
+                     <div class="mb-3">
+                        <label for="user-password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="user-password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="user-name" class="form-label">Name (Optional)</label>
+                        <input type="text" class="form-control" id="user-name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="user-email" class="form-label">Email (Optional)</label>
+                        <input type="email" class="form-control" id="user-email">
+                    </div>
+                     <div class="mb-3">
+                        <label for="user-role" class="form-label">Role</label>
+                        <select class="form-select" id="user-role" required>
+                            <option value="user">User</option>
+                            <option value="staff">Staff</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success">Save User</button>
+                    <button type="button" class="btn btn-secondary cancel-btn">Cancel</button>
+                </form>
+            </div>
+
+            <h4 class="mt-4">All Users</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="users-table-body">
+                    <!-- Sample User Data (replace with dynamic data from backend) -->
+                    <tr>
+                        <td>1</td>
+                        <td>admin_user</td>
+                        <td>Admin User</td>
+                        <td>admin@example.com</td>
+                        <td>admin</td>
+                        <td>
+                            <button class="btn btn-sm btn-info">View</button>
+                            <button class="btn btn-sm btn-warning">Edit</button>
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>staff_user</td>
+                        <td>Staff User</td>
+                        <td>staff@example.com</td>
+                        <td>staff</td>
+                        <td>
+                            <button class="btn btn-sm btn-info">View</button>
+                            <button class="btn btn-sm btn-warning">Edit</button>
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td>3</td>
+                        <td>regular_user</td>
+                        <td>Regular User</td>
+                        <td>user@example.com</td>
+                        <td>user</td>
+                        <td>
+                            <button class="btn btn-sm btn-info">View</button>
+                            <button class="btn btn-sm btn-warning">Edit</button>
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 class="mt-4">Analytics & Reporting</h3>
+            <p>Placeholder for AI-driven analytics and overdue book predictions.</p>
+             <h4 class="mt-4">Borrowing Trends</h4>
+             <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Book Title</th>
+                        <th>Borrow Count</th>
+                    </tr>
+                </thead>
+                <tbody id="borrowing-trends-table-body">
+                    <!-- Sample Borrowing Trends Data (replace with dynamic data from backend) -->
+                    <tr>
+                        <td>The Hitchhiker's Guide to the Galaxy</td>
+                        <td>15</td>
+                    </tr>
+                    <tr>
+                        <td>1984</td>
+                        <td>12</td>
+                    </tr>
+                    <tr>
+                        <td>Pride and Prejudice</td>
+                        <td>10</td>
+                    </tr>
+                </tbody>
+            </table>
+
+             <h4 class="mt-4">Overdue Books</h4>
+             <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Book Title</th>
+                        <th>Borrowed By</th>
+                        <th>Due Date</th>
+                    </tr>
+                </thead>
+                <tbody id="overdue-books-table-body">
+                    <!-- Sample Overdue Books Data (replace with dynamic data from backend) -->
+                    <tr>
+                        <td>Frankenstein</td>
+                        <td>regular_user</td>
+                        <td>2025-05-01</td>
+                    </tr>
+                    <tr>
+                        <td>The Odyssey</td>
+                        <td>staff_user</td>
+                        <td>2025-04-28</td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+          </div>
+        {% elif current_user.is_staff %}
+           <div id="staff-dashboard" class="dashboard animated fade-in">
+            <h2>Staff Dashboard</h2>
+             <h3 class="mt-4">Book Operations</h3>
+             <p>Placeholder for borrowing and returning books.</p>
+             <h4 class="mt-4">All Books</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="staff-books-table-body">
+                    <!-- Sample Book Data (replace with dynamic data from backend) -->
+                     <tr>
+                        <td>1</td>
+                        <td>The Hitchhiker's Guide to the Galaxy</td>
+                        <td>Douglas Adams</td>
+                        <td>Available</td>
+                        <td>
+                            <button class="btn btn-sm btn-success">Borrow</button>
+                            <button class="btn btn-sm btn-secondary">Details</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Pride and Prejudice</td>
+                        <td>Jane Austen</td>
+                        <td>Borrowed</td>
+                        <td>
+                            <button class="btn btn-sm btn-danger">Return</button>
+                            <button class="btn btn-sm btn-secondary">Details</button>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td>3</td>
+                        <td>1984</td>
+                        <td>George Orwell</td>
+                        <td>Available</td>
+                        <td>
+                            <button class="btn btn-sm btn-success">Borrow</button>
+                            <button class="btn btn-sm btn-secondary">Details</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+             <h4 class="mt-4">All Users</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="staff-users-table-body">
+                    <!-- Sample User Data (replace with dynamic data from backend) -->
+                     <tr>
+                        <td>1</td>
+                        <td>admin_user</td>
+                        <td>Admin User</td>
+                        <td>admin</td>
+                        <td>
+                            <button class="btn btn-sm btn-info">View Borrowed</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>staff_user</td>
+                        <td>Staff User</td>
+                        <td>staff</td>
+                        <td>
+                             <button class="btn btn-sm btn-info">View Borrowed</button>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td>3</td>
+                        <td>regular_user</td>
+                        <td>Regular User</td>
+                        <td>user</td>
+                        <td>
+                             <button class="btn btn-sm btn-info">View Borrowed</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 class="mt-4">Staff Attendance</h3>
+            <p>Placeholder for staff attendance tracking.</p>
+             <h3 class="mt-4">Book Return Monitoring</h3>
+            <p>Placeholder for monitoring books nearing their return date.</p>
+          </div>
+        {% else %} {# Default to user dashboard #}
+          <div id="user-dashboard" class="dashboard animated fade-in">
+            <h2>User Dashboard</h2>
+            <p>Welcome, <span id="user-name">{{ current_user.name if current_user.name else current_user.username }}</span>!</p>
+            <div id="user-status-info" class="mt-4">
+              <h3>Your Borrowing Status</h3>
+              <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Book Title</th>
+                        <th>Due Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="user-borrowing-table-body">
+                    <!-- Sample Borrowing Status Data (replace with dynamic data from backend) -->
+                    <tr>
+                        <td>Pride and Prejudice</td>
+                        <td>2025-05-10</td>
+                        <td><button class="btn btn-sm btn-info">Details</button></td>
+                    </tr>
+                    <tr>
+                        <td>The Great Gatsby</td>
+                        <td>2025-05-15</td>
+                        <td><button class="btn btn-sm btn-info">Details</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+            <div id="book-recommendations" class="mt-4">
+              <h3>Recommended Books</h3>
+               <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Book Title</th>
+                        <th>Author</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="user-recommendations-table-body">
+                    <!-- Sample Recommended Books Data (replace with dynamic data from backend) -->
+                    <tr>
+                        <td>Brave New World</td>
+                        <td>Aldous Huxley</td>
+                        <td><button class="btn btn-sm btn-success">Borrow</button></td>
+                    </tr>
+                     <tr>
+                        <td>Fahrenheit 451</td>
+                        <td>Ray Bradbury</td>
+                        <td><button class="btn btn-sm btn-success">Borrow</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+          </div>
+        {% endif %}
+      {% else %}
+        <p>Please log in to access the library system.</p>
+      {% endif %}
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Client-side JavaScript can be added here for dynamic updates within dashboards
+      // The login logic is now handled by the Flask backend
+    </script>
+  </body>
+</html>
